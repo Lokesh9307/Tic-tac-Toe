@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        body{
+            color: aliceblue;
+            background-color: #000;
+            text-align: center;
+        }
+        .container{
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap:1rem;
+        }
+        .game{
+            width: 60vmin;
+            height: 60vmin;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5vmin;
+        }
+        .box{
+            height: 18vmin;
+            width: 18vmin;
+            border-radius: 1rem;
+            cursor: pointer;
+            background-color: #5a585847;
+            border: none;
+            font-size: 8vmin;
+            color: aliceblue;
+        }
+        #reset-btn{
+            padding: 1rem 3rem;
+            border-radius: 1rem;
+            background-color:#5a585847 ;
+            font-size: 2rem;
+            color: aliceblue;
+            cursor: pointer;
+            border: none;
+        }
+        #new-btn{
+            padding: 1rem 3rem;
+            border-radius: 1rem;
+            background-color:#5a5858 ;
+            font-size: 2rem;
+            color: aliceblue;
+            cursor: pointer;
+            border: none;
+        }
+        #msg{
+            color: aquamarine;
+            font-size: 3rem;
+            background-color: rgba(0, 0, 0, 0.666);
+            border: 5px solid rgb(0, 255, 170);
+            border-radius: 1rem;
+            padding: 5rem 1rem;
+        }
+        .hide{
+            display: none;
+        }
+        .msg-container{ 
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="msg-container hide">
+            <h2 id="msg">Winner</h2>
+            <button id="new-btn">New Game</button>
+        </div>
+        <h1>Tic-Tac-Toe Game</h1>
+        <div class="game">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+        </div>
+        <button id="reset-btn">Reset</button>
+    </main>
+</body>
+<script>
+    let boxes = document.querySelectorAll('.box');
+    let resetBtn = document.querySelector('#reset-btn'); 
+    let newBtn = document.querySelector('#new-btn');
+    let msgContainer = document.querySelector('.msg-container');
+    let msg = document.querySelector('#msg');
+
+    let turn0 = true;
+    const winPatterns = [
+        [0,1,2],
+        [0,3,6],
+        [0,4,8],
+        [1,4,7],
+        [2,5,8],
+        [2,4,6],
+        [3,4,5],
+        [3,7,8],
+    ];
+
+    boxes.forEach((box) => {
+        box.addEventListener("click",()=>{
+            if(turn0){
+                box.innerHTML = 'O';
+                turn0 = false;
+            }else{
+                box.innerHTML = 'X'
+                turn0 = true
+            }
+            box.disabled = true;
+
+            checkWinner();
+        })
+    });
+    const disabledBtn =()=>{
+        for (let box of boxes){
+            box.disabled = true;
+        }
+    }
+    const enabledBtn =()=>{
+        for (let box of boxes){
+            box.disabled = false;
+            box.innerText = "";
+        }
+    }
+
+    const showWinner = (winner)=>{
+        msg.innerText = `Congratulation, Winner is ${winner} 🎊`;
+        msgContainer.classList.remove('hide')
+        disabledBtn();
+    }
+
+    const  checkWinner = ()=> {
+        for (pattern of winPatterns){
+
+            let pos1val = boxes[pattern[0]].innerText;
+            let pos2val = boxes[pattern[1]].innerText;
+            let pos3val = boxes[pattern[2]].innerText;
+
+            if(pos1val !="" && pos2val !="" && pos3val != ""){
+                if(pos1val === pos2val && pos2val === pos3val ){
+                    showWinner(pos1val);
+                }
+            }
+        }
+    }
+
+    const resetGame = ()=>{
+        turn0 = true;
+        enabledBtn();
+        msgContainer.classList.add('hide')
+    }
+
+    newBtn.addEventListener('click',resetGame);
+    resetBtn.addEventListener('click',resetGame);
+
+
+
+</script>
+</html>
